@@ -7,3 +7,25 @@ date: "2025-01-13"
 if (!require(httr)) install.packages("httr")
 if (!require(XML)) install.packages("XML")
 
+
+## Pregunta 1
+```{r}
+install.packages("httr")
+install.packages("XML")
+
+library(httr)
+library(XML)
+```
+
+
+
+# Ejercicio 1
+
+```{r}
+url <- "https://www.mediawiki.org/wiki/MediaWiki";
+#handler <- handle("https://www.mediawiki.org");
+
+html <- GET(url)
+
+xml <- htmlParse(html)
+```
