@@ -1,0 +1,4 @@
+---
+title: "Practica2"
+output: html_document
+date: "2025-01-13"
