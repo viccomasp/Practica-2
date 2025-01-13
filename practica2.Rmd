@@ -23,9 +23,14 @@ library(XML)
 
 ```{r}
 url <- "https://www.mediawiki.org/wiki/MediaWiki";
-#handler <- handle("https://www.mediawiki.org");
 
 html <- GET(url)
 
 xml <- htmlParse(html)
 ```
+# Ejercicio 2
+
+```{r}
+
+```
+
