@@ -32,3 +32,15 @@ xml <- htmlParse(html)
 title <- xpathSApply(xml, "//title", xmlValue)
 show(title)
 ```
+
+# Ejercicio 3
+
+```{r}
+textos <- xpathSApply(xml, "//a", xmlValue)
+links <- xpathSApply(xml, "//a", xmlGetAttr, "href")
+valors_nuls <- sapply(links, is.null)
+links[valors_nuls] <- NA
+links <- unlist(links)
+```
+
+
