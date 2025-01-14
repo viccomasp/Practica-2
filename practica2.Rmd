@@ -12,9 +12,6 @@ if (!require(XML)) install.packages("XML")
 ## Pregunta 1
 
 ```{r}
-install.packages("httr")
-install.packages("XML")
-
 library(httr)
 library(XML)
 ```
