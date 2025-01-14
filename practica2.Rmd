@@ -33,4 +33,5 @@ xml <- htmlParse(html)
 
 ```{r}
 title <- xpathSApply(xml, "//title", xmlValue)
+show(title)
 ```
