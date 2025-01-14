@@ -56,7 +56,7 @@ taula_links$full_link <- ifelse(taula_links$es_absoluta == FALSE, paste("https:/
 temp_taula <- taula_links %>% count(full_link)
 
 taula_links <- left_join(taula_links, temp_taula, by = "full_link")
-
+rm(temp_taula)
 
 ```
 
