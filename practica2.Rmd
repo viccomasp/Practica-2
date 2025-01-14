@@ -7,6 +7,7 @@ title: "Practica2" output: html_document date: "2025-01-13"
 ```{r}
 if (!require(httr)) install.packages("httr")
 if (!require(XML)) install.packages("XML")
+if (!require(dplyr)) install.packages("dplyr")
 ```
 
 ## Pregunta 1
@@ -42,5 +43,19 @@ valors_nuls <- sapply(links, is.null)
 links[valors_nuls] <- NA
 links <- unlist(links)
 ```
+
+# Ejercicio 4
+
+```{r}
+taula_links <- data.frame( Textos = textos, Links = links)
+
+dplyr::summarise()
+
+```
+
+
+
+
+
 
 
