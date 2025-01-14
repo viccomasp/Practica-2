@@ -49,7 +49,14 @@ links <- unlist(links)
 ```{r}
 taula_links <- data.frame( Textos = textos, Links = links)
 
-dplyr::summarise()
+taula_links$es_absoluta <- grepl("^http", taula_links$Links)
+
+taula_links$full_link <- ifelse(taula_links$es_absoluta == FALSE, paste("https://www.mediawiki.org", taula_links$Links), taula_links$Links )
+
+temp_taula <- taula_links %>% count(full_link)
+
+taula_links <- left_join(taula_links, temp_taula, by = "full_link")
+
 
 ```
 
