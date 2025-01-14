@@ -60,7 +60,19 @@ rm(temp_taula)
 
 ```
 
+#Ejercicio 5
 
+```{r}
+
+library(httr2)
+
+req <- request("https://developer.wikimedia.org/")
+resp <- req_perform
+#resp_status(resphttps://developer.wikimedia.org/
+df$status <- sapply(df$url, function(url){
+  resp_status(req_perform(request(url)))
+})
+```
 
 
 
