@@ -51,7 +51,7 @@ taula_links <- data.frame( Textos = textos, Links = links)
 
 taula_links$es_absoluta <- grepl("^http", taula_links$Links)
 
-taula_links$full_link <- ifelse(taula_links$es_absoluta == FALSE, paste("https://www.mediawiki.org", taula_links$Links), taula_links$Links )
+taula_links$full_link <- ifelse(taula_links$es_absoluta == FALSE, paste0("https://www.mediawiki.org", taula_links$Links), taula_links$Links )
 
 temp_taula <- taula_links %>% count(full_link)
 
@@ -66,12 +66,19 @@ rm(temp_taula)
 
 library(httr2)
 
-req <- request("https://developer.wikimedia.org/")
-resp <- req_perform
-#resp_status(resphttps://developer.wikimedia.org/
-df$status <- sapply(df$url, function(url){
-  resp_status(req_perform(request(url)))
-})
+status_link <- function(link) {
+  Sys.sleep(0.2)
+  response <- GET(link)
+  status_code(response)
+}
+
+status_link_vector <- Vectorize(status_link)
+
+taula_links <- taula_links %>%
+  mutate(status = status_link_vector(taula_links$full_link))
+
+
+
 ```
 
 
