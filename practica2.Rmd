@@ -8,6 +8,7 @@ title: "Practica2" output: html_document date: "2025-01-13"
 if (!require(httr)) install.packages("httr")
 if (!require(XML)) install.packages("XML")
 if (!require(dplyr)) install.packages("dplyr")
+if (!require(ggplot2)) install.packages("ggplot2")
 ```
 
 ## Pregunta 1
@@ -81,7 +82,31 @@ taula_links <- taula_links %>%
 
 ```
 
+## Pregunta 2
+
+```{r}
+library(ggplot2)
+```
+
+# Ejercicio 1
+
+```{r}
+
+taula_links <- taula_links %>%
+  mutate(type = ifelse(grepl("^http", Links), "Absolute", "Relative"))
+
+url_counts <- taula_links %>%
+  group_by(type, Links) %>%
+  summarise(count = n(), .groups = "drop")
+
+ggplot(url_counts, aes(x = Links, y = count, fill = type)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(
+    title = "Frecuencia de URLs Absolutas y Relativas",
+    x = "URLs",
+    y = "Frecuencia",
+    fill = "Tipo de URL"
+  ) 
 
 
-
-
+```
