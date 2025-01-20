@@ -15,13 +15,16 @@ if (!require(ggplot2)) install.packages("ggplot2")
 ## Pregunta 1
 
 ```{r}
+# Cargamos algunas librerías útiles
 library(httr)
 library(XML)
+library(dplyr)
 ```
 
 # Ejercicio 1
 
 ```{r}
+# Cogemos la URL indicada, la descargamos y finalmente la pasamos a xml, ya que luego nos resultará más facil para analizar.
 url <- "https://www.mediawiki.org/wiki/MediaWiki";
 
 html <- GET(url)
@@ -32,6 +35,7 @@ xml <- htmlParse(html)
 # Ejercicio 2
 
 ```{r}
+# Usamos la siguiente función para buscar el título de la página y lo mostramos por pantalla.
 title <- xpathSApply(xml, "//title", xmlValue)
 show(title)
 ```
@@ -39,22 +43,31 @@ show(title)
 # Ejercicio 3
 
 ```{r}
+# Buscamos en la página los enlaces y el texto con el que están escritos y lo guardamos en sus variables.
 textos <- xpathSApply(xml, "//a", xmlValue)
 links <- xpathSApply(xml, "//a", xmlGetAttr, "href")
+
+# Buscamos los valores nulos que haya en la lista "links" y los sustituye por NA.
 valors_nuls <- sapply(links, is.null)
 links[valors_nuls] <- NA
+
+# Recategorizamos la lista "links" por conveniencia.
 links <- unlist(links)
 ```
 
 # Ejercicio 4
 
 ```{r}
+# Creamos el data frame con las URLs y sus respectivos textos.
 taula_links <- data.frame( Textos = textos, Links = links)
 
+# Creamos una nueva columna del data frame que nos dirá si la URL es absoluta (TRUE) o si no (FALSE).
 taula_links$es_absoluta <- grepl("^http", taula_links$Links)
 
+# Creamos una nueva columna del data frame para unir el dominio base a las URLs que sean relativas.
 taula_links$full_link <- ifelse(taula_links$es_absoluta == FALSE, paste0("https://www.mediawiki.org", taula_links$Links), taula_links$Links )
 
+# Creamos un data frame temporal para contar cuantas veces aparece cada enlace. Una vez hecho borramos esa data frame.
 temp_taula <- taula_links %>% count(full_link)
 
 taula_links <- left_join(taula_links, temp_taula, by = "full_link")
@@ -65,15 +78,17 @@ rm(temp_taula)
 #Ejercicio 5
 
 ```{r}
-
+# Empezamos creando una función que devuelve el código de status de una URL. A saber, 200 (petición correcta), 404 (no encontrado) o bien 403 (acceso restringido). Además hemos añadido un pequeño tiempo de espera entre cada petición para evitar ser baneados por el servidor.
 status_link <- function(link) {
   Sys.sleep(0.2)
   response <- GET(link)
   status_code(response)
 }
 
+# Vectorizamos la anterior función para poder usarla en el mutate (siguiente linea).
 status_link_vector <- Vectorize(status_link)
 
+# Creamos una nueva columna de nuestro data frame en el que aparece el "status code" de la petición para cada URL.
 taula_links <- taula_links %>%
   mutate(status = status_link_vector(taula_links$full_link))
 
@@ -86,14 +101,16 @@ taula_links <- taula_links %>%
 # Ejercicio 1
 
 ```{r}
-
+# Creamos una nueva coluumna del data frame similar a una hecha anteriormente, pero con unas denominaciones distintas, puesto que nos ayudará a crear el gráfico que deseamos. Clasificamos las URLs por tipo: absolutas y relativas.
 taula_links <- taula_links %>%
-  mutate(type = ifelse(grepl("^http", Links), "Absolute", "Relative"))
+  mutate(type = ifelse(grepl("^http", Links), "Absoluta", "Relativa"))
 
+# Agrupamos ahora por tipo y URLs; y contamos las frecuencias.
 url_counts <- taula_links %>%
   group_by(type, Links) %>%
   summarise(count = n(), .groups = "drop")
 
+# Creamos un histograma de aparición de los enlaces separando URLs absolutas y relativas.
 ggplot(url_counts, aes(x = Links, y = count, fill = type)) +
   geom_bar(stat = "identity", position = "dodge") +
   labs(
@@ -105,7 +122,7 @@ ggplot(url_counts, aes(x = Links, y = count, fill = type)) +
 
 
 ```
-
+# Ejercicio 2
 ```{r}
 library(ggplot2)
 
@@ -159,7 +176,7 @@ labs(
   y = 'Número de enlaces'
 )
 ```
-
+# Ejercicio 3
 
 ```{r}
 
