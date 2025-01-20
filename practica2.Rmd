@@ -10,6 +10,7 @@ if (!require(httr2)) install.packages("httr2")
 if (!require(XML)) install.packages("XML")
 if (!require(dplyr)) install.packages("dplyr")
 if (!require(ggplot2)) install.packages("ggplot2")
+if (!require(gridExtra)) install.packages("gridExtra")
 ```
 
 ## Pregunta 1
@@ -111,7 +112,7 @@ url_counts <- taula_links %>%
   summarise(count = n(), .groups = "drop")
 
 # Creamos un histograma de aparición de los enlaces separando URLs absolutas y relativas.
-ggplot(url_counts, aes(x = Links, y = count, fill = type)) +
+plot1 <- ggplot(url_counts, aes(x = Links, y = count, fill = type)) +
   geom_bar(stat = "identity", position = "dodge") +
   labs(
     title = "Frecuencia de URLs Absolutas y Relativas",
@@ -119,7 +120,7 @@ ggplot(url_counts, aes(x = Links, y = count, fill = type)) +
     y = "Frecuencia",
     fill = "Tipo de URL"
   ) 
-
+plot1
 
 ```
 # Ejercicio 2
@@ -188,14 +189,28 @@ conteo_status <- taula_links %>%
 conteo_status$status <- factor(conteo_status$status)
 
 # Generamos el pie chart.
-ggplot(conteo_status, aes(x = "", y = freq, fill = status)) +
+plot3 <- ggplot(conteo_status, aes(x = "", y = freq, fill = status)) +
   geom_bar(stat = "identity") +
   coord_polar("y") +
   labs(title = "Porcentaje de status", fill = "Status code") +
   scale_fill_manual(values = c("200" = "blue", "404" = "green")) +
   theme_void()
 
+plot3
+
 ```
+
+```{r}
+# Cargamos la libreria que nos permitirá combinar distintos gráficos en una sola figura.
+library(gridExtra)
+
+# Llamamos a la función y colocamos nuestros gráficos.
+grid.arrange(plot1, plot3, nrow = 2)
+
+
+
+```
+
 
 
 
