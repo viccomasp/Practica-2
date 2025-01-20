@@ -140,7 +140,7 @@ conteo_mediawiki <- taula_links %>%
 plot2 <- ggplot(conteo_mediawiki, aes(x = "", y = freq, fill = es_mediawiki)) +
   geom_bar(stat = "identity") +
   coord_polar("y") +
-  labs(title = "Porcentaje de status", fill = "Es mediawiki") +
+  labs(title = "Porcentaje de enlaces internos o externos", fill = "Es mediawiki") +
   scale_fill_manual(values = c("True" = "green", "False" = "red")) +
   theme_void()
 
