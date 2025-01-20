@@ -180,8 +180,6 @@ plot3
 library(gridExtra)
 
 # Llamamos a la función y colocamos nuestros gráficos.
-grid.arrange(plot1, plot2 ,plot3, ncol = 2)
-
 grid.arrange(plot1,         
   arrangeGrob(plot2, plot3, ncol = 2), nrow = 2)
 
