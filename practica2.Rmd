@@ -119,7 +119,7 @@ plot1 <- ggplot(aaa, aes(x = count, y = n, fill = type)) +
   geom_bar(stat = "identity", position = "dodge") +
   labs(
     title = "Frecuencia de URLs Absolutas y Relativas",
-    x = "URLs",
+    x = "Número de repeticiones",
     y = "Frecuencia",
     fill = "Tipo de URL"
   ) 
