@@ -125,7 +125,28 @@ plot1
 ```
 # Ejercicio 2
 ```{r}
-library(ggplot2)
+# Creamos una nueva coluumna del data frame similar a una hecha anteriormente, pero con unas denominaciones distintas, puesto que nos ayudará a crear el gráfico que deseamos. Clasificamos las URLs no ser de mediawiki o serlo
+
+taula_links <- taula_links %>%
+  mutate(es_mediawiki = ifelse(grepl("^https://www.mediawiki.org", full_link), "True", "False"))
+
+
+# Contamos cuantas URLs apuntan a otros dominios o servicios vs las que apuntan a https://www.mediawiki.org
+conteo_mediawiki <- taula_links %>%
+  group_by(es_mediawiki) %>%
+  summarise(freq = n())
+
+# Generamos el pie chart.
+plot2 <- ggplot(conteo_mediawiki, aes(x = "", y = freq, fill = es_mediawiki)) +
+  geom_bar(stat = "identity") +
+  coord_polar("y") +
+  labs(title = "Porcentaje de status", fill = "Es mediawiki") +
+  scale_fill_manual(values = c("True" = "green", "False" = "red")) +
+  theme_void()
+
+plot2
+
+
 
 ```
 # Ejercicio 3
