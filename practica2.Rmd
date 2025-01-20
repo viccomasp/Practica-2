@@ -177,7 +177,7 @@ plot3
 library(gridExtra)
 
 # Llamamos a la función y colocamos nuestros gráficos.
-grid.arrange(plot1, plot3, nrow = 2)
+grid.arrange(plot1, plot2 ,plot3, nrow = 3)
 
 
 
