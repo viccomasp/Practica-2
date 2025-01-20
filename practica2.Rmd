@@ -127,55 +127,6 @@ plot1
 ```{r}
 library(ggplot2)
 
-# Define una función auxiliar `get_domain` que toma una URL y devuelve solo el dominio
-get_domain <- function(url) {
-  return(gsub("^(https?://(www\\.)?)|([^/]+/.*)$", "\\3", url))
-}
-
-# Crea una nueva columna `dominio` a partir de la columna `full_link` para extraer solo el dominio
-taula_links$dominio <- sapply(taula_links$full_link, get_domain)
-
-# Crea un dataframe `total_links` con las columnas `dominio` y `n`, y agrupa por `dominio` y suma los valores de `n`
-total_links <- aggregate(n ~ dominio, taula_links, sum)
-
-# Crea un dataframe `enlaces_dentro` filtrando `total_links` para cuando `dominio` sea 'www.mediawiki.org'
-enlaces_dentro <- total_links[total_links$dominio == 'www.mediawiki.org',]
-
-# Crea un dataframe `enlaces_fuera` filtrando `total_links` para cuando `dominio` no sea 'www.mediawiki.org'
-enlaces_fuera <- total_links[total_links$dominio != 'www.mediawiki.org',]
-
-# Crea un gráfico de barras con la suma de enlaces que apuntan a otros dominios o servicios (distinto a 'www.mediawiki.org') vs. la suma de los otros enlaces
-ggplot(data.frame(
-  'Tipo de enlace' = c('Enlaces dentro', 'Enlaces fuera'),
-  'Número de enlaces' = c(enlaces_dentro$n, sum(enlaces_fuera$n))
-)) +
-geom_bar(aes(x = 'Tipo de enlace', y = 'Número de enlaces'), stat = "identity") +
-labs(
-  title = 'Número de enlaces dentro vs fuera del dominio',
-  x = 'Tipo de enlace',
-  y = 'Número de enlaces'
-)
-
-# Crea un gráfico de barras que muestre los dominios a los que apuntan los enlaces externos, excluyendo 'www.mediawiki.org'
-ggplot(enlaces_fuera, aes(x = dominio, y = n)) +
-geom_bar(stat = "identity") +
-labs(
-  title = 'Número de enlaces por dominio externo',
-  x = 'Dominio',
-  y = 'Número de enlaces'
-)
-
-# Crea un gráfico de barras que compare el número de enlaces internos (dentro del dominio) con el número de enlaces externos (fuera del dominio)
-ggplot(data.frame(
-  'Tipo de enlace' = c('Enlaces internos', 'Enlaces externos'),
-  'Número de enlaces' = c(enlaces_dentro$n, sum(enlaces_fuera$n))
-)) +
-geom_bar(aes(x = 'Tipo de enlace', y = 'Número de enlaces'), stat = "identity") +
-labs(
-  title = 'Comparación de enlaces internos y externos',
-  x = 'Tipo de enlace',
-  y = 'Número de enlaces'
-)
 ```
 # Ejercicio 3
 
