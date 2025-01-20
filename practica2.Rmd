@@ -111,8 +111,11 @@ url_counts <- taula_links %>%
   group_by(type, Links) %>%
   summarise(count = n(), .groups = "drop")
 
-# Creamos un histograma de aparición de los enlaces separando URLs absolutas y relativas.
-plot1 <- ggplot(url_counts, aes(x = Links, y = count, fill = type)) +
+# Agrupamos ahora por tipo y repeticiones de cada link.
+aaa <- dplyr::count(url_counts, type, count)
+
+# Creamos un gráfico de barras que representa la frecuencia con la que se repiten los enlaces y a la vez separándolo por "Absoluta" y "Relativa".
+plot1 <- ggplot(aaa, aes(x = count, y = n, fill = type)) +
   geom_bar(stat = "identity", position = "dodge") +
   labs(
     title = "Frecuencia de URLs Absolutas y Relativas",
@@ -177,8 +180,10 @@ plot3
 library(gridExtra)
 
 # Llamamos a la función y colocamos nuestros gráficos.
-grid.arrange(plot1, plot2 ,plot3, nrow = 3)
+grid.arrange(plot1, plot2 ,plot3, ncol = 2)
 
+grid.arrange(plot1,         
+  arrangeGrob(plot2, plot3, ncol = 2), nrow = 2)
 
 
 ```
