@@ -179,6 +179,21 @@ labs(
 # Ejercicio 3
 
 ```{r}
+# Contamos cuantas URLs hay por cada código de status de la petición.
+conteo_status <- taula_links %>%
+  group_by(status) %>%
+  summarise(freq = n())
+
+# Cambiamos a tipo factor la columna "status" para que no nos la tome como contínua.
+conteo_status$status <- factor(conteo_status$status)
+
+# Generamos el pie chart.
+ggplot(conteo_status, aes(x = "", y = freq, fill = status)) +
+  geom_bar(stat = "identity") +
+  coord_polar("y") +
+  labs(title = "Porcentaje de status", fill = "Status code") +
+  scale_fill_manual(values = c("200" = "blue", "404" = "green")) +
+  theme_void()
 
 ```
 
